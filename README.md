@@ -78,7 +78,7 @@ En caso de que el sistema creciera demasiado, será mucho más fácil agregar nu
 
 ---
 
-### 📙 Ejercicio No. 2 - Open/Closed Principle (OCP)
+### 📙 Ejercicio No. 2 - Open/Closed Principle (OCP) - Lía Torres
 
 Se trabaja con un sistema de descuentos que requiere modificaciones constantes para agregar nuevos tipos de clientes. La refactorización busca extender funcionalidades sin modificar código existente.
 
@@ -153,7 +153,7 @@ Esta puede mejorarse separando las aves que vuelan de las que no vuelan. Así, s
 
 ---
 
-### 📒 Ejercicio No. 4 - Interface Segregation Principle (ISP)
+### 📒 Ejercicio No. 4 - Interface Segregation Principle (ISP) - Lía Torres
 
 Se analiza una interfaz que obliga a implementar métodos innecesarios y se propone una división más específica de responsabilidades.
 
