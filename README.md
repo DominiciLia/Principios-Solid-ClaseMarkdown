@@ -80,9 +80,74 @@ En caso de que el sistema creciera demasiado, será mucho más fácil agregar nu
 
 ### 📙 Ejercicio No. 2 - Open/Closed Principle (OCP) - Lía Torres
 
-Se trabaja con un sistema de descuentos que requiere modificaciones constantes para agregar nuevos tipos de clientes. La refactorización busca extender funcionalidades sin modificar código existente.
+**Problemática:**Se trabaja con un sistema de descuentos que requiere modificaciones constantes para agregar nuevos tipos de clientes. La refactorización busca extender funcionalidades sin modificar código existente.
 
+````csharp
+//Ejercicio No. 2 - Código "malo" a modificar
+
+public class Descuento
+{
+    public double Calcular(string tipoCliente, double monto)
+    {
+        if (tipoCliente == "Regular")
+            return monto * 0.05;
+
+        if (tipoCliente == "VIP")
+            return monto * 0.10;
+
+        return 0;
+    }
+}
+````
+
+### Código refactorizado 📌
+````csharp
+ public interface IDescuento
+ {
+     double Calcular(double monto); 
+ }
+
+ public class Principio_2_O : IDescuento
+ {
+     public double Calcular(double monto)
+     {
+         return monto * 0.05;
+     }
+
+
+     public class DescuentoRegular : IDescuento
+     {
+         public double Calcular(double monto)
+         {
+             return monto * 0.05;
+         }
+
+     }
+     public class DescuentoVIP : IDescuento
+     {
+         public double Calcular(double monto)
+         {
+             return monto * 0.10;
+         }
+
+     }
+ }
+
+````
 ---
+### 📑 Preguntas de análisis
+---
+
+#### ●¿Por qué este código no es escalable?
+El código original no es escalable porque cada vez que aparece un nuevo tipo de cliente es necesario modificar la clase de descuentos. Esto provoca que la clase crezca constantemente y aumenta el riesgo de introducir errores en funcionalidades que ya estaban funcionando correctamente.
+
+#### ●¿Cómo ayuda el polimorfismo?
+El polimorfismo permite que cada tipo de descuento tenga su propia implementación sin modificar el código principal. De esta manera, el sistema puede trabajar con diferentes descuentos a través de una misma interfaz, facilitando la incorporación de nuevas funcionalidades.
+
+#### ●¿Qué ventaja ofrece OCP en proyectos grandes?
+OCP permite agregar nuevas características sin alterar el código existente. En proyectos grandes esto reduce el riesgo de errores, facilita el mantenimiento y permite que varios desarrolladores trabajen en nuevas funcionalidades sin afectar las ya implementadas.
+
+
 
 ### 📗 Ejercicio No. 3 - Liskov Substitution Principle (LSP) - Naomy Amador
 **Problemática:** En esta clase el Pingüino rompe el comportamiento esperado de la clase base. Por ende, el estudiante tendrá que refactorizar el diseño para evitar que clases hijas tengan comportamientos inválidos. Debe realizarlo usando interfaces, clases más específicas y separación de comportamientos.
@@ -155,9 +220,81 @@ Esta puede mejorarse separando las aves que vuelan de las que no vuelan. Así, s
 
 ### 📒 Ejercicio No. 4 - Interface Segregation Principle (ISP) - Lía Torres
 
-Se analiza una interfaz que obliga a implementar métodos innecesarios y se propone una división más específica de responsabilidades.
+**Problemática:**Se analiza una interfaz que obliga a implementar métodos innecesarios y se propone una división más específica de responsabilidades.
+````csharp
+//Ejercicio No. 4 - Código "malo" a modificar
+public interface ITrabajador
+{
+    void Trabajar();
+    void Comer();
+}
 
+public class Robot : ITrabajador
+{
+    public void Trabajar()
+    {
+        Console.WriteLine("Trabajando...");
+    }
+
+    public void Comer()
+    {
+        throw new Exception("Los robots no comen");
+    }
+}
+````
+
+
+### Código refactorizado 📌
+````csharp
+
+    public interface IComedor
+    {
+       void Comer();
+    }
+
+    public interface ITrabajador
+    {
+     void Trabajar();
+    }
+
+    public class principio_4__I
+{
+
+    public class Humano : ITrabajador, IComedor 
+    {
+        public void Trabajar() 
+        {
+              Console.WriteLine("Trabajando...");
+         } 
+        public void Comer() 
+        { 
+              Console.WriteLine("Comiendo...");
+        } 
+    
+    }
+    public class Robot : ITrabajador 
+    {
+        public void Trabajar() 
+        {
+              Console.WriteLine("Trabajando...");
+         }
+
+    }
+}
+
+````
 ---
+### 📑 Preguntas de análisis
+---
+
+#### ●¿Qué problema presenta esta interfaz?
+La interfaz original obliga a todas las clases a implementar métodos que quizás no necesitan. En el ejemplo, el robot se ve forzado a implementar el método Comer(), aunque esa acción no forma parte de su comportamiento.
+
+#### ●¿Cómo mejora ISP el diseño?
+ISP mejora el diseño al dividir las interfaces en responsabilidades más específicas. Así, cada clase implementa únicamente los métodos que realmente necesita, evitando dependencias innecesarias y haciendo el código más coherente.
+
+#### ●¿Qué ventajas ofrece dividir interfaces?
+Dividir interfaces aumenta la flexibilidad y reduce el acoplamiento entre componentes. Además, facilita el mantenimiento del sistema, mejora la reutilización del código y permite crear clases más simples y enfocadas en una única responsabilidad.
 
 ### 📘 Ejercicio No. 5 - Dependency Inversion Principle (DIP) - Naomy Amador
 **Problemática:** En este caso en particular, la clase depende directamente de una implementación concreta **public class MySQLDatabase**. Debido a esto, el estudiante tendrá que Refactorizar usando interfaces, inyección de dependencias, abstracción; además, es importante que el sistema pueda de cambiar fácilmente la base de datos.
